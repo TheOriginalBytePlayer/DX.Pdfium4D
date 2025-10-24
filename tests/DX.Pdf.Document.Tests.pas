@@ -51,6 +51,9 @@ type
 
     [Test]
     procedure TestMultipleDocuments;
+
+    [Test]
+    procedure TestPdfVersion;
   end;
 
 implementation
@@ -258,6 +261,26 @@ begin
   finally
     LDocument2.Free;
     LDocument1.Free;
+  end;
+end;
+
+procedure TPdfDocumentTests.TestPdfVersion;
+var
+  LDocument: TPdfDocument;
+  LVersion: Integer;
+  LVersionString: string;
+begin
+  LDocument := TPdfDocument.Create;
+  try
+    LDocument.LoadFromFile(FTestPdfPath);
+
+    LVersion := LDocument.GetFileVersion;
+    LVersionString := LDocument.GetFileVersionString;
+
+    Assert.IsTrue(LVersion > 0, 'PDF version should be greater than 0');
+    Assert.AreEqual('1.4', LVersionString, 'PDF version string should be 1.4');
+  finally
+    LDocument.Free;
   end;
 end;
 

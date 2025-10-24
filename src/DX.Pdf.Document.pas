@@ -110,6 +110,16 @@ type
     function GetPageByIndex(AIndex: Integer): TPdfPage;
 
     /// <summary>
+    /// Gets the PDF file version (e.g., 14 for PDF 1.4, 17 for PDF 1.7)
+    /// </summary>
+    function GetFileVersion: Integer;
+
+    /// <summary>
+    /// Gets the PDF version as a string (e.g., "1.4", "1.7")
+    /// </summary>
+    function GetFileVersionString: string;
+
+    /// <summary>
     /// Number of pages in the document
     /// </summary>
     property PageCount: Integer read FPageCount;
@@ -319,6 +329,29 @@ begin
   Result := TPdfPage.Create(Self, AIndex);
 end;
 
+function TPdfDocument.GetFileVersion: Integer;
+var
+  LVersion: Integer;
+begin
+  Result := 0;
+  if IsLoaded then
+  begin
+    if FPDF_BoolToBoolean(FPDF_GetFileVersion(FHandle, LVersion)) then
+      Result := LVersion;
+  end;
+end;
+
+function TPdfDocument.GetFileVersionString: string;
+var
+  LVersion: Integer;
+begin
+  LVersion := GetFileVersion;
+  if LVersion > 0 then
+    Result := Format('%d.%d', [LVersion div 10, LVersion mod 10])
+  else
+    Result := 'Unknown';
+end;
+
 { TPdfPage }
 
 constructor TPdfPage.Create(ADocument: TPdfDocument; APageIndex: Integer);
@@ -369,8 +402,12 @@ begin
   if ABitmap = nil then
     raise EPdfRenderException.Create('Bitmap is nil');
 
-  // Calculate bitmap size maintaining aspect ratio
-  ABitmap.SetSize(Round(FWidth), Round(FHeight));
+  // Bitmap size should already be set by caller to desired resolution
+  // Don't resize here - caller determines the DPI/resolution
+
+  // Validate bitmap has valid size
+  if (ABitmap.Width <= 0) or (ABitmap.Height <= 0) then
+    raise EPdfRenderException.Create('Bitmap has invalid size');
 
   // Create PDFium bitmap (BGRA format)
   LPdfBitmap := FPDFBitmap_Create(ABitmap.Width, ABitmap.Height, 1);
@@ -386,14 +423,15 @@ begin
     LBgColor := (LA shl 24) or (LR shl 16) or (LG shl 8) or LB;
     FPDFBitmap_FillRect(LPdfBitmap, 0, 0, ABitmap.Width, ABitmap.Height, LBgColor);
 
-    // Render PDF page to bitmap
+    // Render PDF page to bitmap with high-quality settings
+    // Use FPDF_ANNOT for annotations and FPDF_LCD_TEXT for better text rendering
     FPDF_RenderPageBitmap(
       LPdfBitmap,
       FHandle,
       0, 0,
       ABitmap.Width, ABitmap.Height,
       FPDF_ROTATE_0,
-      FPDF_ANNOT
+      FPDF_ANNOT or FPDF_LCD_TEXT
     );
 
     // Copy PDFium bitmap to FMX bitmap

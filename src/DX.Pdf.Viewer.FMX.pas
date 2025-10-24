@@ -183,6 +183,8 @@ begin
     FImage.Align := TAlignLayout.Client;
     FImage.HitTest := False;
     FImage.WrapMode := TImageWrapMode.Fit;
+    // Enable interpolation for smooth scaling
+    FImage.DisableInterpolation := False;
   end;
 end;
 
@@ -249,6 +251,10 @@ begin
 end;
 
 procedure TPdfViewer.RenderCurrentPage;
+var
+  LRenderWidth: Integer;
+  LRenderHeight: Integer;
+  LDPI: Single;
 begin
   if not IsDocumentLoaded then
     Exit;
@@ -261,7 +267,31 @@ begin
 
   if FCurrentPage <> nil then
   begin
+    // Use 200 DPI for high-quality rendering (PDF points are 72 DPI)
+    // This gives us ~2.8x resolution which matches modern high-DPI displays
+    LDPI := 200.0;
+
+    // Calculate render size based on PDF page size in points
+    // PDF points: 1 point = 1/72 inch
+    // At 200 DPI: pixels = (points / 72) * 200
+    LRenderWidth := Round((FCurrentPage.Width / 72.0) * LDPI);
+    LRenderHeight := Round((FCurrentPage.Height / 72.0) * LDPI);
+
+    // Ensure minimum size
+    if LRenderWidth < 100 then
+      LRenderWidth := 100;
+    if LRenderHeight < 100 then
+      LRenderHeight := 100;
+
+    // Set bitmap size to calculated high-resolution
+    FImage.Bitmap.SetSize(LRenderWidth, LRenderHeight);
+
+    // Set bitmap scale to 1.0 for consistent rendering
+    FImage.Bitmap.BitmapScale := 1.0;
+
+    // Render at high resolution
     FCurrentPage.RenderToBitmap(FImage.Bitmap, FBackgroundColor);
+
     Repaint;
   end;
 end;

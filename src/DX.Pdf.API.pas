@@ -63,6 +63,9 @@ const
   FPDF_RENDER_LIMITEDIMAGECACHE = $200;
   FPDF_RENDER_FORCEHALFTONE = $400;
   FPDF_PRINTING = $800;
+  FPDF_RENDER_NO_SMOOTHTEXT = $1000;
+  FPDF_RENDER_NO_SMOOTHIMAGE = $2000;
+  FPDF_RENDER_NO_SMOOTHPATH = $4000;
   FPDF_REVERSE_BYTE_ORDER = $10;
 
   // Page rotation
@@ -151,6 +154,7 @@ function FPDF_LoadDocument(const AFilePath: FPDF_STRING; const APassword: FPDF_B
 function FPDF_LoadMemDocument(const ADataBuf: Pointer; ASize: Integer; const APassword: FPDF_BYTESTRING): FPDF_DOCUMENT; cdecl; external PDFIUM_DLL;
 procedure FPDF_CloseDocument(ADocument: FPDF_DOCUMENT); cdecl; external PDFIUM_DLL;
 function FPDF_GetPageCount(ADocument: FPDF_DOCUMENT): Integer; cdecl; external PDFIUM_DLL;
+function FPDF_GetFileVersion(ADocument: FPDF_DOCUMENT; var AFileVersion: Integer): FPDF_BOOL; cdecl; external PDFIUM_DLL;
 function FPDF_GetPageSizeByIndex(ADocument: FPDF_DOCUMENT; APageIndex: Integer; out AWidth: Double; out AHeight: Double): FPDF_BOOL; cdecl; external PDFIUM_DLL;
 
 // Page functions (fpdfview.h)

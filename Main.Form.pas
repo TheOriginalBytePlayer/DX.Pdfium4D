@@ -17,12 +17,14 @@ uses
   FMX.StdCtrls,
   System.IOUtils,
   DX.Pdf.Viewer.FMX,
-  DX.Pdf.Document;
+  DX.Pdf.Document, FMX.Controls.Presentation;
 
 type
   TMainForm = class(TForm)
     DropPanel: TPanel;
     DropLabel: TLabel;
+    StatusBar: TStatusBar;
+    StatusLabel: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
@@ -31,6 +33,7 @@ type
     procedure HideDropPanel;
     procedure ShowDropPanel;
     procedure CreatePdfViewer;
+    procedure UpdateStatusBar(const AFileName: string; const APdfVersion: string);
   protected
     procedure LoadPdfFile(const AFilePath: string);
     procedure ProcessCommandLineParams;
@@ -53,6 +56,9 @@ begin
 
   // Create PDF viewer dynamically
   CreatePdfViewer;
+
+  // Initialize status bar
+  UpdateStatusBar('', '');
 
   // Show drop panel initially
   ShowDropPanel;
@@ -107,6 +113,8 @@ begin
 end;
 
 procedure TMainForm.LoadPdfFile(const AFilePath: string);
+var
+  LPdfVersion: string;
 begin
   if not TFile.Exists(AFilePath) then
   begin
@@ -120,18 +128,34 @@ begin
 
     FCurrentPdfPath := AFilePath;
 
+    // Get PDF version
+    if FPdfViewer.Document <> nil then
+      LPdfVersion := FPdfViewer.Document.GetFileVersionString
+    else
+      LPdfVersion := 'Unknown';
+
     // Hide drop panel when PDF is loaded
     HideDropPanel;
 
-    // Update window title
+    // Update window title and status bar
     Caption := 'DX PDF-Viewer 1.0 - ' + TPath.GetFileName(AFilePath);
+    UpdateStatusBar(TPath.GetFileName(AFilePath), LPdfVersion);
   except
     on E: EPdfException do
     begin
       ShowMessage('Error loading PDF: ' + E.Message);
       ShowDropPanel;
+      UpdateStatusBar('', '');
     end;
   end;
+end;
+
+procedure TMainForm.UpdateStatusBar(const AFileName: string; const APdfVersion: string);
+begin
+  if (AFileName <> '') and (APdfVersion <> '') then
+    StatusLabel.Text := Format('File: %s  |  PDF Version: %s', [AFileName, APdfVersion])
+  else
+    StatusLabel.Text := 'No document loaded';
 end;
 
 procedure TMainForm.DragOver(const Data: TDragObject; const Point: TPointF; var Operation: TDragOperation);
