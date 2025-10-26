@@ -7,15 +7,13 @@ uses
   System.Types,
   System.UITypes,
   System.Classes,
+  System.IOUtils,
   FMX.Types,
   FMX.Controls,
   FMX.Forms,
   FMX.Dialogs,
   FMX.StdCtrls,
-  FMX.Controls.Presentation,
-  FMX.Objects,
   FMX.Menus,
-  System.IOUtils,
   DX.Pdf.Viewer.FMX,
   DX.Pdf.Document;
 
