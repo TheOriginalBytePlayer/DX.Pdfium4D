@@ -14,6 +14,7 @@ uses
   System.Types,
   System.UITypes,
   System.Classes,
+  System.Threading,
   FMX.Types,
   FMX.Controls,
   FMX.Graphics,
@@ -41,11 +42,14 @@ type
     FShowLoadingIndicator: Boolean;
     FOnPageChanged: TNotifyEvent;
     FIsRendering: Boolean;
+    FRenderTask: ITask;
     procedure SetCurrentPageIndex(const AValue: Integer);
     procedure SetBackgroundColor(const AValue: TAlphaColor);
     procedure SetShowLoadingIndicator(const AValue: Boolean);
     function GetPageCount: Integer;
     procedure RenderCurrentPage;
+    procedure RenderPageInBackground;
+    procedure OnRenderComplete(ABitmap: TBitmap);
     procedure CreateImage;
     procedure CreateLoadingIndicator;
     procedure DoShowLoadingIndicator;
@@ -333,15 +337,6 @@ begin
 end;
 
 procedure TPdfViewer.RenderCurrentPage;
-var
-  LRenderWidth: Integer;
-  LRenderHeight: Integer;
-  LAspectRatio: Double;
-  LControlWidth: Integer;
-  LControlHeight: Integer;
-  LScreenService: IFMXScreenService;
-  LScale: Single;
-  LTempBitmap: TBitmap;
 begin
   if not IsDocumentLoaded then
     Exit;
@@ -353,65 +348,116 @@ begin
     Exit;
 
   FIsRendering := True;
-  try
-    // Show loading indicator
-    DoShowLoadingIndicator;
 
-    FreeAndNil(FCurrentPage);
-    FCurrentPage := FDocument.GetPageByIndex(FCurrentPageIndex);
+  // Show loading indicator immediately
+  DoShowLoadingIndicator;
 
-    if FCurrentPage <> nil then
+  // Start background rendering
+  RenderPageInBackground;
+end;
+
+procedure TPdfViewer.RenderPageInBackground;
+var
+  LRenderWidth: Integer;
+  LRenderHeight: Integer;
+  LAspectRatio: Double;
+  LControlWidth: Integer;
+  LControlHeight: Integer;
+  LScreenService: IFMXScreenService;
+  LScale: Single;
+  LPageIndex: Integer;
+  LBackgroundColor: TAlphaColor;
+begin
+  // Capture values in main thread
+  LPageIndex := FCurrentPageIndex;
+  LBackgroundColor := FBackgroundColor;
+
+  // Get screen scale factor for high-DPI displays
+  LScale := 1.0;
+  if TPlatformServices.Current.SupportsPlatformService(IFMXScreenService, LScreenService) then
+    LScale := LScreenService.GetScreenScale;
+
+  // Get control size in pixels
+  LControlWidth := Trunc(Width);
+  LControlHeight := Trunc(Height);
+
+  if (LControlWidth <= 0) or (LControlHeight <= 0) then
+  begin
+    FIsRendering := False;
+    Exit;
+  end;
+
+  // Load page in main thread (PDFium is not thread-safe for loading)
+  FreeAndNil(FCurrentPage);
+  FCurrentPage := FDocument.GetPageByIndex(LPageIndex);
+
+  if FCurrentPage = nil then
+  begin
+    FIsRendering := False;
+    DoHideLoadingIndicator;
+    Exit;
+  end;
+
+  // Calculate aspect ratio of PDF page
+  LAspectRatio := FCurrentPage.Width / FCurrentPage.Height;
+
+  // Calculate render size to fit control while maintaining aspect ratio
+  if LControlWidth / LControlHeight > LAspectRatio then
+  begin
+    // Height is limiting factor
+    LRenderHeight := Round(LControlHeight * LScale);
+    LRenderWidth := Round(LRenderHeight * LAspectRatio);
+  end
+  else
+  begin
+    // Width is limiting factor
+    LRenderWidth := Round(LControlWidth * LScale);
+    LRenderHeight := Round(LRenderWidth / LAspectRatio);
+  end;
+
+  // Render in background thread
+  FRenderTask := TTask.Run(
+    procedure
+    var
+      LTempBitmap: TBitmap;
     begin
-      // Get screen scale factor for high-DPI displays
-      LScale := 1.0;
-      if TPlatformServices.Current.SupportsPlatformService(IFMXScreenService, LScreenService) then
-        LScale := LScreenService.GetScreenScale;
-
-      // Get control size in pixels
-      LControlWidth := Trunc(Width);
-      LControlHeight := Trunc(Height);
-
-      if (LControlWidth <= 0) or (LControlHeight <= 0) then
-        Exit;
-
-      // Calculate aspect ratio of PDF page
-      LAspectRatio := FCurrentPage.Width / FCurrentPage.Height;
-
-      // Calculate render size to fit control while maintaining aspect ratio
-      // Multiply by screen scale for high-DPI displays
-      if LControlWidth / LControlHeight > LAspectRatio then
-      begin
-        // Height is limiting factor
-        LRenderHeight := Round(LControlHeight * LScale);
-        LRenderWidth := Round(LRenderHeight * LAspectRatio);
-      end
-      else
-      begin
-        // Width is limiting factor
-        LRenderWidth := Round(LControlWidth * LScale);
-        LRenderHeight := Round(LRenderWidth / LAspectRatio);
-      end;
-
-      // Render to temporary bitmap first
       LTempBitmap := TBitmap.Create;
       try
         LTempBitmap.SetSize(LRenderWidth, LRenderHeight);
         LTempBitmap.BitmapScale := LScale;
 
-        // Render at exact size
-        FCurrentPage.RenderToBitmap(LTempBitmap, FBackgroundColor);
+        // Render at exact size (this is the slow part)
+        FCurrentPage.RenderToBitmap(LTempBitmap, LBackgroundColor);
 
-        // Swap bitmaps (fast operation)
-        FImage.Bitmap.Assign(LTempBitmap);
-      finally
+        // Switch back to main thread to update UI
+        TThread.Synchronize(nil,
+          procedure
+          begin
+            OnRenderComplete(LTempBitmap);
+          end);
+      except
         LTempBitmap.Free;
+        TThread.Synchronize(nil,
+          procedure
+          begin
+            FIsRendering := False;
+            DoHideLoadingIndicator;
+          end);
       end;
+    end);
+end;
 
-      // Hide loading indicator and show rendered page
-      DoHideLoadingIndicator;
-      Repaint;
-    end;
+procedure TPdfViewer.OnRenderComplete(ABitmap: TBitmap);
+begin
+  try
+    // Swap bitmaps (fast operation in main thread)
+    FImage.Bitmap.Assign(ABitmap);
+
+    // Hide loading indicator and show rendered page
+    DoHideLoadingIndicator;
+    Repaint;
   finally
+    ABitmap.Free;
     FIsRendering := False;
   end;
 end;

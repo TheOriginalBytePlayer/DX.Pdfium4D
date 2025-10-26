@@ -7,27 +7,26 @@ uses
   System.Types,
   System.UITypes,
   System.Classes,
-  System.Variants,
   FMX.Types,
   FMX.Controls,
   FMX.Forms,
-  FMX.Graphics,
   FMX.Dialogs,
-  FMX.Objects,
   FMX.StdCtrls,
+  FMX.Controls.Presentation,
+  FMX.Objects,
   System.IOUtils,
   DX.Pdf.Viewer.FMX,
-  DX.Pdf.Document, FMX.Controls.Presentation;
+  DX.Pdf.Document;
 
 type
   TMainForm = class(TForm)
     DropPanel: TPanel;
-    DropLabel: TLabel;
     StatusBar: TStatusBar;
     StatusLabel: TLabel;
     PageLabel: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure DropPanelClick(Sender: TObject);
   private
     FPdfViewer: TPdfViewer;
     FCurrentPdfPath: string;
@@ -36,6 +35,7 @@ type
     procedure CreatePdfViewer;
     procedure UpdateStatusBar;
     procedure OnPdfViewerPageChanged(Sender: TObject);
+    procedure ShowOpenDialog;
   protected
     procedure LoadPdfFile(const AFilePath: string);
     procedure ProcessCommandLineParams;
@@ -93,7 +93,7 @@ end;
 procedure TMainForm.ShowDropPanel;
 begin
   DropPanel.Visible := True;
-  DropPanel.HitTest := False;  // Let drag events pass through to form
+  DropPanel.HitTest := True; // Enable click events
   DropPanel.BringToFront;
 end;
 
@@ -108,7 +108,7 @@ begin
 
     // Check if the file exists and is a PDF
     if TFile.Exists(LFilePath) and
-       (LowerCase(TPath.GetExtension(LFilePath)) = '.pdf') then
+      (LowerCase(TPath.GetExtension(LFilePath)) = '.pdf') then
     begin
       LoadPdfFile(LFilePath);
     end;
@@ -193,7 +193,7 @@ procedure TMainForm.DragOver(const Data: TDragObject; const Point: TPointF; var 
 begin
   // Check if we have files and if it's a PDF file
   if (Length(Data.Files) > 0) and
-     (LowerCase(TPath.GetExtension(Data.Files[0])) = '.pdf') then
+    (LowerCase(TPath.GetExtension(Data.Files[0])) = '.pdf') then
   begin
     Operation := TDragOperation.Copy;
   end
@@ -217,6 +217,34 @@ begin
     begin
       ShowMessage('Please drop PDF files only.');
     end;
+  end;
+end;
+
+procedure TMainForm.DropPanelClick(Sender: TObject);
+begin
+  ShowOpenDialog;
+end;
+
+procedure TMainForm.ShowOpenDialog;
+var
+  LOpenDialog: TOpenDialog;
+begin
+  LOpenDialog := TOpenDialog.Create(nil);
+  try
+    LOpenDialog.Title := 'Open PDF File';
+    LOpenDialog.Filter := 'PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*';
+    LOpenDialog.DefaultExt := 'pdf';
+    LOpenDialog.Options := [TOpenOption.ofFileMustExist, TOpenOption.ofEnableSizing];
+
+    if LOpenDialog.Execute then
+    begin
+      if LowerCase(TPath.GetExtension(LOpenDialog.FileName)) = '.pdf' then
+        LoadPdfFile(LOpenDialog.FileName)
+      else
+        ShowMessage('Please select a PDF file.');
+    end;
+  finally
+    LOpenDialog.Free;
   end;
 end;
 
