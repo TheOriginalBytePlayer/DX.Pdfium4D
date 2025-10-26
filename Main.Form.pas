@@ -35,6 +35,7 @@ type
   private
     FPdfViewer: TPdfViewer;
     FCurrentPdfPath: string;
+    FOpenDialogActive: Boolean;
     procedure HideDropPanel;
     procedure ShowDropPanel;
     procedure CreatePdfViewer;
@@ -227,29 +228,40 @@ end;
 
 procedure TMainForm.DropPanelClick(Sender: TObject);
 begin
-  ShowOpenDialog;
+  // Prevent multiple dialogs from opening
+  if not FOpenDialogActive then
+    ShowOpenDialog;
 end;
 
 procedure TMainForm.ShowOpenDialog;
 var
   LOpenDialog: TOpenDialog;
 begin
-  LOpenDialog := TOpenDialog.Create(nil);
-  try
-    LOpenDialog.Title := 'Open PDF File';
-    LOpenDialog.Filter := 'PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*';
-    LOpenDialog.DefaultExt := 'pdf';
-    LOpenDialog.Options := [TOpenOption.ofFileMustExist, TOpenOption.ofEnableSizing];
+  // Prevent multiple dialogs from opening simultaneously
+  if FOpenDialogActive then
+    Exit;
 
-    if LOpenDialog.Execute then
-    begin
-      if TPath.GetExtension(LOpenDialog.FileName).ToLower = '.pdf' then
-        LoadPdfFile(LOpenDialog.FileName)
-      else
-        ShowMessage('Please select a PDF file.');
+  FOpenDialogActive := True;
+  try
+    LOpenDialog := TOpenDialog.Create(nil);
+    try
+      LOpenDialog.Title := 'Open PDF File';
+      LOpenDialog.Filter := 'PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*';
+      LOpenDialog.DefaultExt := 'pdf';
+      LOpenDialog.Options := [TOpenOption.ofFileMustExist, TOpenOption.ofEnableSizing];
+
+      if LOpenDialog.Execute then
+      begin
+        if TPath.GetExtension(LOpenDialog.FileName).ToLower = '.pdf' then
+          LoadPdfFile(LOpenDialog.FileName)
+        else
+          ShowMessage('Please select a PDF file.');
+      end;
+    finally
+      LOpenDialog.Free;
     end;
   finally
-    LOpenDialog.Free;
+    FOpenDialogActive := False;
   end;
 end;
 
