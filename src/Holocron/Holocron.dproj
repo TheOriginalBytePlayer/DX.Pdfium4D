@@ -4,10 +4,10 @@
         <AppType>Application</AppType>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <FrameworkType>FMX</FrameworkType>
-        <MainSource>DxPdfViewer.dpr</MainSource>
+        <MainSource>Holocron.dpr</MainSource>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <ProjectGuid>{98E09F52-8C94-4B95-A1BA-DBC2A7ED804F}</ProjectGuid>
-        <ProjectName Condition="'$(ProjectName)'==''">DxPdfViewer</ProjectName>
+        <ProjectName Condition="'$(ProjectName)'==''">Holocron</ProjectName>
         <ProjectVersion>20.3</ProjectVersion>
         <TargetedPlatforms>693267</TargetedPlatforms>
     </PropertyGroup>
@@ -89,7 +89,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <SanitizedProjectName>DxPdfViewer</SanitizedProjectName>
+        <SanitizedProjectName>Holocron</SanitizedProjectName>
         <AUP_ACCESS_COARSE_LOCATION>true</AUP_ACCESS_COARSE_LOCATION>
         <AUP_ACCESS_FINE_LOCATION>true</AUP_ACCESS_FINE_LOCATION>
         <AUP_CALL_PHONE>true</AUP_CALL_PHONE>
@@ -101,15 +101,15 @@
         <DCC_DcuOutput>.\$(Platform)\$(Config)\dcu</DCC_DcuOutput>
         <DCC_ExeOutput>.\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
-        <Icns_MainIcns>DxPdfViewer.icns</Icns_MainIcns>
-        <Icon_MainIcon>DxPdfViewer.ico</Icon_MainIcon>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <Icns_MainIcns>Holocron.icns</Icns_MainIcns>
+        <Icon_MainIcon>Holocron.ico</Icon_MainIcon>
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Keys>CompanyName=Olaf Monien;FileDescription=HOLOCRON - The Delphi PDF Viewer;FileVersion=1.0.0.0;InternalName=Holocron;LegalCopyright=(c) 2025 Olaf Monien;LegalTrademarks=;OriginalFilename=Holocron.exe;ProductName=HOLOCRON;ProductVersion=1.0.0.0;Comments=Minimalistic PDF Viewer based on PDFium;CFBundleIdentifier=net.developer-experts.holocron</VerInfo_Keys>
+        <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_MajorVer>1</VerInfo_MajorVer>
         <VerInfo_MinorVer>0</VerInfo_MinorVer>
         <VerInfo_Release>0</VerInfo_Release>
-        <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=Olaf Monien;FileDescription=DX PDF-Viewer;FileVersion=1.0.0.0;InternalName=DxPdfViewer;LegalCopyright=(c) 2025 Olaf Monien;LegalTrademarks=;OriginalFilename=DxPdfViewer.exe;ProductName=DX PDF-Viewer;ProductVersion=1.0.0.0;Comments=PDF Viewer based on PDFium;CFBundleIdentifier=net.developer-experts.dxpdfviewer</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <Android_AdaptiveIconBackground>$(BDS)\bin\Artwork\Android\FM_AdaptiveIcon_Background.xml</Android_AdaptiveIconBackground>
@@ -143,7 +143,7 @@
         <IncludeAndroid_VectorizedNotificationIcon>true</IncludeAndroid_VectorizedNotificationIcon>
         <IncludeAndroid_VectorizedSplash>true</IncludeAndroid_VectorizedSplash>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Keys>package=net.developer-experts.dxpdfviewer;label=DX PDF-Viewer;versionCode=1;versionName=1.0.0;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=;minSdkVersion=23;targetSdkVersion=35</VerInfo_Keys>
+        <VerInfo_Keys>package=net.developer-experts.holocron;label=HOLOCRON;versionCode=1;versionName=1.0.0;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=;minSdkVersion=23;targetSdkVersion=35</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android64)'!=''">
         <Android_AdaptiveIconBackground>$(BDS)\bin\Artwork\Android\FM_AdaptiveIcon_Background.xml</Android_AdaptiveIconBackground>
@@ -177,28 +177,28 @@
         <IncludeAndroid_VectorizedNotificationIcon>true</IncludeAndroid_VectorizedNotificationIcon>
         <IncludeAndroid_VectorizedSplash>true</IncludeAndroid_VectorizedSplash>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Keys>package=net.developer-experts.dxpdfviewer;label=DX PDF-Viewer;versionCode=1;versionName=1.0.0;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=;minSdkVersion=23;targetSdkVersion=35</VerInfo_Keys>
+        <VerInfo_Keys>package=net.developer-experts.holocron;label=HOLOCRON;versionCode=1;versionName=1.0.0;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=;minSdkVersion=23;targetSdkVersion=35</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_OSX64)'!=''">
         <BT_BuildType>Debug</BT_BuildType>
         <DCC_UsePackage>FireDACIBDriver;DataSnapServer;FMXTMSFNCUIPackPkg;fmx;DbxCommonDriver;bindengine;IndyIPCommon;FireDACCommonODBC;emsclient;aurelius;IndyProtocols;dbxcds;FmxTeeUI;DBXFirebirdDriver;FireDACSqliteDriver;DbxClientDriver;soapmidas;dbexpress;inet;FireDACDBXDriver;fmxdae;tmsbcl;CustomIPTransport;FireDACMSSQLDriver;IndySystem;TMSFNCCorePkg;FireDACCommon;DataSnapServerMidas;FireDACODBCDriver;emsserverresource;bindcompdbx;DX.UTF8Normalizer.Runtime;rtl;FireDACMySQLDriver;DBXSqliteDriver;DataSnapFireDAC;inetdbxpress;FireDAC;xmlrtl;dsnap;xdata;DBXOracleDriver;DBXInformixDriver;fmxobj;DataSnapNativeClient;FMXTMSFNCCorePkg;emshosting;sparkle;FireDACCommonDriver;IndyIPClient;FMXTMSFNCCloudPackPkg;emsedge;bindcompfmx;inetdb;FireDACASADriver;fmxFireDAC;DBXMySQLDriver;DataSnapCommon;fmxase;dbrtl;FireDACOracleDriver;DataSnapIndy10ServerTransport;DBXInterBaseDriver;FireDACMongoDBDriver;FireDACTDataDriver;bindcomp;inetstn;IndyCore;RESTBackendComponents;RESTComponents;IndyIPServer;dsnapxml;DataSnapClient;DataSnapProviderClient;emsclientfiredac;FireDACPgDriver;FireDACDSDriver;tethering;CloudService;DBXSybaseASADriver;FMXTee;soaprtl;soapserver;$(DCC_UsePackage)</DCC_UsePackage>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Keys>CFBundleName=DX PDF-Viewer;CFBundleDisplayName=DX PDF-Viewer;CFBundleIdentifier=net.developer-experts.dxpdfviewer;CFBundleVersion=1.0.0;CFBundleShortVersionString=1.0.0;CFBundlePackageType=APPL;CFBundleSignature=DXPV;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=DxPdfViewer;NSHighResolutionCapable=true;LSApplicationCategoryType=public.app-category.productivity;NSHumanReadableCopyright=(c) 2025 Olaf Monien;NSDocumentsFolderUsageDescription=To open PDF files from the Documents folder;NSDownloadsFolderUsageDescription=To open PDF files from the Downloads folder;NSDesktopFolderUsageDescription=To open PDF files from the Desktop folder;ITSAppUsesNonExemptEncryption=false</VerInfo_Keys>
+        <VerInfo_Keys>CFBundleName=HOLOCRON;CFBundleDisplayName=HOLOCRON;CFBundleIdentifier=net.developer-experts.holocron;CFBundleVersion=1.0.0;CFBundleShortVersionString=1.0.0;CFBundlePackageType=APPL;CFBundleSignature=HLCR;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=Holocron;NSHighResolutionCapable=true;LSApplicationCategoryType=public.app-category.productivity;NSHumanReadableCopyright=(c) 2025 Olaf Monien;NSDocumentsFolderUsageDescription=To open PDF files from the Documents folder;NSDownloadsFolderUsageDescription=To open PDF files from the Downloads folder;NSDesktopFolderUsageDescription=To open PDF files from the Desktop folder;ITSAppUsesNonExemptEncryption=false</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_OSXARM64)'!=''">
         <BT_BuildType>Debug</BT_BuildType>
         <DCC_UsePackage>FireDACIBDriver;DataSnapServer;FMXTMSFNCUIPackPkg;fmx;DbxCommonDriver;bindengine;IndyIPCommon;FireDACCommonODBC;emsclient;aurelius;IndyProtocols;dbxcds;FmxTeeUI;DBXFirebirdDriver;FireDACSqliteDriver;DbxClientDriver;soapmidas;dbexpress;inet;FireDACDBXDriver;fmxdae;tmsbcl;CustomIPTransport;FireDACMSSQLDriver;IndySystem;TMSFNCCorePkg;FireDACCommon;DataSnapServerMidas;FireDACODBCDriver;emsserverresource;bindcompdbx;DX.UTF8Normalizer.Runtime;rtl;FireDACMySQLDriver;DBXSqliteDriver;DataSnapFireDAC;inetdbxpress;FireDAC;xmlrtl;dsnap;xdata;DBXOracleDriver;DBXInformixDriver;fmxobj;DataSnapNativeClient;FMXTMSFNCCorePkg;emshosting;sparkle;FireDACCommonDriver;IndyIPClient;FMXTMSFNCCloudPackPkg;emsedge;bindcompfmx;inetdb;FireDACASADriver;fmxFireDAC;DBXMySQLDriver;DataSnapCommon;fmxase;dbrtl;FireDACOracleDriver;DataSnapIndy10ServerTransport;DBXInterBaseDriver;FireDACMongoDBDriver;FireDACTDataDriver;bindcomp;inetstn;IndyCore;RESTBackendComponents;RESTComponents;IndyIPServer;dsnapxml;DataSnapClient;DataSnapProviderClient;emsclientfiredac;FireDACPgDriver;FireDACDSDriver;tethering;CloudService;DBXSybaseASADriver;FMXTee;soaprtl;soapserver;$(DCC_UsePackage)</DCC_UsePackage>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Keys>CFBundleName=DX PDF-Viewer;CFBundleDisplayName=DX PDF-Viewer;CFBundleIdentifier=net.developer-experts.dxpdfviewer;CFBundleVersion=1.0.0;CFBundleShortVersionString=1.0.0;CFBundlePackageType=APPL;CFBundleSignature=DXPV;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=DxPdfViewer;NSHighResolutionCapable=true;LSApplicationCategoryType=public.app-category.productivity;NSHumanReadableCopyright=(c) 2025 Olaf Monien;NSDocumentsFolderUsageDescription=To open PDF files from the Documents folder;NSDownloadsFolderUsageDescription=To open PDF files from the Downloads folder;NSDesktopFolderUsageDescription=To open PDF files from the Desktop folder;ITSAppUsesNonExemptEncryption=false</VerInfo_Keys>
+        <VerInfo_Keys>CFBundleName=HOLOCRON;CFBundleDisplayName=HOLOCRON;CFBundleIdentifier=net.developer-experts.holocron;CFBundleVersion=1.0.0;CFBundleShortVersionString=1.0.0;CFBundlePackageType=APPL;CFBundleSignature=HLCR;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=Holocron;NSHighResolutionCapable=true;LSApplicationCategoryType=public.app-category.productivity;NSHumanReadableCopyright=(c) 2025 Olaf Monien;NSDocumentsFolderUsageDescription=To open PDF files from the Documents folder;NSDownloadsFolderUsageDescription=To open PDF files from the Downloads folder;NSDesktopFolderUsageDescription=To open PDF files from the Desktop folder;ITSAppUsesNonExemptEncryption=false</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <BT_BuildType>Debug</BT_BuildType>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <DCC_UsePackage>FireDACIBDriver;vclwinx;DataSnapServer;FMXTMSFNCUIPackPkg;IWBootstrap4D12;fs29;fmx;DbxCommonDriver;vclie;bindengine;IndyIPCommon;VCLRESTComponents;DBXMSSQLDriver;FireDACCommonODBC;emsclient;aurelius;FMXfrCoreLibrary29;appanalytics;IndyProtocols;vclx;Skia.Package.RTL;fsTee29;dbxcds;vcledge;frxADOQueryBuilder29;frLanguageSlovak29;FmxTeeUI;frLanguageHungarian29;DBXFirebirdDriver;FireDACSqliteDriver;DbxClientDriver;soapmidas;frLanguageArabic29;TeeUI;frCoreLibrary29;dbexpress;frLanguageCatalon29;frxFDQueryBuilder29;frLanguageBrazil29;frLanguageCzech29;inet;IWBootstrapD12;vcltouch;DragDropDR12;FireDACDBXDriver;fmxdae;tmsbcl;CustomIPTransport;FireDACMSSQLDriver;frLanguageItalian29;frxPDF29;VCLTMSFNCCloudPackPkg;fqbFD29;frLanguageSwiss29;IndySystem;frxe29;frLanguageSwedish29;TMSFNCCorePkg;frLanguageUkrainian29;fsDB29;vclFireDAC;FireDACCommon;DataSnapServerMidas;FireDACODBCDriver;emsserverresource;frLanguageDanish29;bindcompdbx;DX.UTF8Normalizer.Runtime;frxTee29;rtl;FireDACMySQLDriver;fqb29;frLanguageLithuanian29;DBXSqliteDriver;frLanguageFrench29;frLanguageRussian29;DBXSybaseASEDriver;frxSM29;vclimg;DataSnapFireDAC;inetdbxpress;FireDAC;VCLTMSFNCUIPackPkg;xmlrtl;dsnap;xdata;frFDDataLibrary29;frLanguageSerbian29;FireDACDb2Driver;DBXOracleDriver;DBXInformixDriver;frLanguageFarsi29;fmxobj;bindcompvclsmp;DataSnapNativeClient;frx29;frLanguageChinese29;DatasnapConnectorsFreePascal;frControlsLibrary29;frxQueryBuilder29;frxIntIOIndy29;frLanguageHebrew29;FMXTMSFNCCorePkg;fqbADO29;emshosting;sparkle;frxDB29;fqbDBX29;frLocalizationLibrary29;FireDACCommonDriver;IndyIPClient;frxHTML29;FMXTMSFNCCloudPackPkg;bindcompvclwinx;frLanguageTaiwan29;emsedge;bindcompfmx;frxDBXQueryBuilder29;frLanguageRomanian29;frLanguageGerman29;inetdb;Intraweb_15_D12;frLanguageIndonesian29;FireDACASADriver;Tee;frLanguageBrazil229;vclactnband;FMXfrxDB29;fmxFireDAC;FireDACInfxDriver;frLanguageCroatian29;DBXMySQLDriver;fsADO29;VclSmp;DataSnapCommon;fmxase;DBXOdbcDriver;dbrtl;FireDACOracleDriver;Skia.Package.FMX;TeeDB;FireDACMSAccDriver;frxcs29;frLanguageSlovene29;DataSnapIndy10ServerTransport;frADODataLibrary29;DataSnapConnectors;frLanguageTurkish29;vcldsnap;DBXInterBaseDriver;frLanguageGreek29;FireDACMongoDBDriver;FireDACTDataDriver;Skia.Package.VCL;frLanguageBrazil129;vcldb;bindcomp;frLanguageLatvian29;inetstn;IndyCore;RESTBackendComponents;frLanguageSpanish29;frxIntIO29;FMXfrx29;frLanguageJapanese29;frSmartMemo29;FireDACADSDriver;RaizeComponentsVclDb;frxFD29;RESTComponents;IndyIPServer;vcl;dsnapxml;adortl;dsnapcon;DataSnapClient;DataSnapProviderClient;fsFD29;FixInsight_12;DBXDb2Driver;frxADO29;frLanguageDutch29;emsclientfiredac;FireDACPgDriver;FireDACDSDriver;fqbSM29;frLanguagePortuguese29;tethering;frLanguageBulgarian29;frLanguagePolish29;bindcompvcl;frxDBX29;CloudService;DBXSybaseASADriver;VCLTMSFNCCorePkg;FMXTee;FMXfrLocalizationLibrary29;frGraphicsLibrary29;soaprtl;RaizeComponentsVcl;soapserver;$(DCC_UsePackage)</DCC_UsePackage>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
-        <VerInfo_Keys>CompanyName=Olaf Monien;FileDescription=DX PDF-Viewer;FileVersion=1.0.0.0;InternalName=DxPdfViewer;LegalCopyright=(c) 2025 Olaf Monien;LegalTrademarks=;OriginalFilename=DxPdfViewer.exe;ProgramID=net.developer-experts.dxpdfviewer;ProductName=DX PDF-Viewer;ProductVersion=1.0.0.0;Comments=PDF Viewer based on PDFium</VerInfo_Keys>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Keys>CompanyName=Olaf Monien;FileDescription=HOLOCRON - The Delphi PDF Viewer;FileVersion=1.0.0.0;InternalName=Holocron;LegalCopyright=(c) 2025 Olaf Monien;LegalTrademarks=;OriginalFilename=Holocron.exe;ProgramID=net.developer-experts.holocron;ProductName=HOLOCRON;ProductVersion=1.0.0.0;Comments=Minimalistic PDF Viewer based on PDFium</VerInfo_Keys>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
@@ -301,9 +301,9 @@
             <Form>MainForm</Form>
             <FormType>fmx</FormType>
         </DCCReference>
-        <DCCReference Include="src\DX.Pdf.API.pas"/>
-        <DCCReference Include="src\DX.Pdf.Document.pas"/>
-        <DCCReference Include="src\DX.Pdf.Viewer.FMX.pas"/>
+        <DCCReference Include="..\DX.Pdf.API.pas"/>
+        <DCCReference Include="..\DX.Pdf.Document.pas"/>
+        <DCCReference Include="..\DX.Pdf.Viewer.FMX.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -322,7 +322,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">DxPdfViewer.dpr</Source>
+                    <Source Name="MainSource">Holocron.dpr</Source>
                 </Source>
             </Delphi.Personality>
             <Deployment Version="5">
@@ -338,12 +338,6 @@
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Win32\Debug\DxPdfViewer.exe" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win32">
-                        <RemoteName>DxPdfViewer.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

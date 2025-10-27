@@ -1,14 +1,21 @@
-unit DX.Pdf.API;
+{*******************************************************************************
+  Unit: DX.Pdf.API
 
-{
-  Platform-independent PDFium C-API bindings for Delphi
-  
-  Based on PDFium from https://pdfium.googlesource.com/pdfium/
-  Binaries from https://github.com/bblanchon/pdfium-binaries
-  
-  This unit provides low-level bindings to the PDFium library.
-  For high-level object-oriented access, use DX.Pdf.Document instead.
-}
+  Part of HOLOCRON - The Delphi PDF Viewer
+  https://developer-experts.net
+
+  Description:
+    Platform-independent PDFium C-API bindings for Delphi.
+    Provides low-level bindings to the PDFium library.
+    For high-level object-oriented access, use DX.Pdf.Document instead.
+
+  Based on:
+    PDFium from https://pdfium.googlesource.com/pdfium/
+    Binaries from https://github.com/bblanchon/pdfium-binaries
+
+  Copyright (c) 2025 Olaf Monien
+*******************************************************************************}
+unit DX.Pdf.API;
 
 interface
 

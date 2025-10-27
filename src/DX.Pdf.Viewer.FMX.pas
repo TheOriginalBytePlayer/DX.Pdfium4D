@@ -1,11 +1,17 @@
-unit DX.Pdf.Viewer.FMX;
+{*******************************************************************************
+  Unit: DX.Pdf.Viewer.FMX
 
-{
-  FMX PDF Viewer Component
-  
-  Provides a visual component for displaying PDF documents in FMX applications.
-  Supports navigation, zooming, and drag-and-drop.
-}
+  Part of HOLOCRON - The Delphi PDF Viewer
+  https://developer-experts.net
+
+  Description:
+    FMX PDF Viewer Component.
+    Provides a visual component for displaying PDF documents in FMX applications.
+    Supports navigation, zooming, and drag-and-drop.
+
+  Copyright (c) 2025 Olaf Monien
+*******************************************************************************}
+unit DX.Pdf.Viewer.FMX;
 
 interface
 

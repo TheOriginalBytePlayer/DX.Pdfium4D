@@ -1,4 +1,12 @@
-program DxPdfViewerTests;
+{*******************************************************************************
+  HOLOCRON Tests
+
+  Unit tests for HOLOCRON - The Delphi PDF Viewer
+  https://developer-experts.net
+
+  Copyright (c) 2025 Olaf Monien
+*******************************************************************************}
+program HolocronTests;
 
 {$IFNDEF TESTINSIGHT}
 {$APPTYPE CONSOLE}
@@ -14,8 +22,8 @@ uses
   DUnitX.Loggers.Xml.NUnit,
   {$ENDIF }
   DUnitX.TestFramework,
-  DX.Pdf.API in '..\src\DX.Pdf.API.pas',
-  DX.Pdf.Document in '..\src\DX.Pdf.Document.pas',
+  DX.Pdf.API in '..\DX.Pdf.API.pas',
+  DX.Pdf.Document in '..\DX.Pdf.Document.pas',
   DX.Pdf.Document.Tests in 'DX.Pdf.Document.Tests.pas';
 
 {$IFNDEF TESTINSIGHT}

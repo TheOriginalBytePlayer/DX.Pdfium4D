@@ -1,304 +1,265 @@
-# 📄 DX PDF-Viewer
+# HOLOCRON
+## The Delphi PDF Viewer
 
-> A minimalist, elegant PDF viewer for Windows
-> Developed with Embarcadero Delphi FireMonkey (FMX)
+![HOLOCRON Logo](assets/Logo.svg)
 
----
-
-## ✨ Features
-
-| Feature | Description |
-|---------|-------------|
-| 📖 **PDF Display** | Displays PDF files using Google's PDFium engine |
-| 🖱️ **Drag & Drop** | Drag PDF files directly into the window |
-| ⌨️ **Command Line** | Opens PDF files directly at startup via parameters |
-| 🎨 **Minimalist** | Clean design without unnecessary features |
-| ⚡ **Fast** | Native rendering with PDFium library |
-| 🌍 **Cross-Platform Ready** | Architecture supports Windows, macOS, Linux, iOS, Android |
+**HOLOCRON** is a minimalistic, cross-platform PDF viewer built with Delphi and FireMonkey (FMX), based on Google's PDFium library. It serves as a demonstration of Delphi PDFium wrapper classes and showcases modern Delphi development practices.
 
 ---
 
-## 🚀 Usage
+## Features
 
-### 📂 Opening PDF Files
+✨ **Minimalistic Design**
+- Clean, distraction-free interface
+- Focus on content, not chrome
+- Modern Material Design-inspired UI
 
-There are **three simple ways** to open a PDF file:
+📄 **PDF Viewing**
+- High-quality rendering using Google's PDFium
+- Automatic high-DPI display support
+- Smooth page navigation with keyboard, mouse wheel, and touch gestures
 
-#### 1️⃣ Drag & Drop
-Simply drag a PDF file onto the application window.
+🎯 **User-Friendly**
+- Drag & Drop PDF files to open
+- Click anywhere to browse for files
+- Keyboard shortcuts (Ctrl+O to open, arrow keys to navigate)
+- PDF/A detection and metadata display
 
-#### 2️⃣ Command Line
-```bash
-DxPdfViewer.exe "C:\Path\to\File.pdf"
-```
+⚡ **Performance**
+- Background rendering for smooth UI
+- Efficient memory management
+- Fast page switching
 
-#### 3️⃣ File Association
-Associate `.pdf` files with DxPdfViewer.exe in Windows Explorer.
-
----
-
-### 🧪 Testing with the Demo PDF
-
-The project includes a **`readme.pdf`** (this file) that you can use for testing:
-
-```bash
-# 🎯 Simple with starter script
-run-demo.bat
-
-# 🔧 Or with PowerShell
-.\run-demo.ps1
-
-# ⚙️ Or manually
-Win32\Debug\DxPdfViewer.exe readme.pdf
-```
-
-**Demo Features:**
-- ✅ Formatted text with Markdown styling
-- ✅ Tables and lists
-- ✅ Code blocks
-- ✅ Emojis and symbols
+🌍 **Cross-Platform**
+- Windows (Win32, Win64)
+- macOS (Intel, Apple Silicon)
+- Android
+- iOS
 
 ---
 
-### 🔧 Technical Details
+## Getting Started
 
-| Component | Details |
-|-----------|---------|
-| 🎯 **Framework** | Delphi FireMonkey (FMX) |
-| 📊 **PDF Rendering** | Google PDFium (Chrome's PDF engine) |
-| 💻 **Platform** | Windows (Win32/Win64) - Cross-platform ready |
-| 🛠️ **Delphi Version** | Delphi 12 (Athens) |
-| 📦 **Dependencies** | PDFium library (included) |
-| 🏗️ **Architecture** | Clean 3-layer design: API → Document → Viewer |
-| ✅ **Testing** | DUnitX test suite included |
-| 🔧 **Installation** | No component installation required - viewer created dynamically |
+### Prerequisites
 
-> **Note:** PDF rendering uses Google's PDFium library, the same engine used in Chrome browser.
+- **Delphi 12.2 Athens** or later
+- **PDFium Library** (included in `lib/pdfium-bin`)
 
-## 📁 Project Structure
+### Building
 
-```
-📦 DX-PDFViewer/
-│
-├── 📄 DxPdfViewer.dpr              # Main program file
-├── 📋 DxPdfViewer.dproj            # Delphi project file
-│
-├── 📝 Main.Form.pas                # Main form (code)
-├── 🎨 Main.Form.fmx                # Main form (design)
-│
-├── 📂 src/                         # Source code
-│   ├── 🔧 DX.Pdf.API.pas           # PDFium C-API bindings
-│   ├── 📚 DX.Pdf.Document.pas      # Object-oriented PDF wrapper
-│   └── 🖼️ DX.Pdf.Viewer.FMX.pas   # FMX viewer component
-│
-├── 📂 tests/                       # Unit tests
-│   ├── 🧪 DxPdfViewerTests.dpr     # Test project
-│   └── ✅ DX.Pdf.Document.Tests.pas # Document tests
-│
-├── 📂 lib/                         # External libraries
-│   ├── 📦 pdfium-binaries/         # PDFium binaries (Git submodule)
-│   └── 📚 pdfium-bin/              # Extracted PDFium DLLs
-│
-├── 📖 readme.pdf                   # Demo PDF (this file as PDF)
-├── 📘 README.md                    # This file (Markdown)
-│
-├── ▶️ run-demo.bat                 # Starter script (Batch)
-├── ⚡ run-demo.ps1                 # Starter script (PowerShell)
-├── 🔧 copy-pdfium-dll.bat          # Post-build DLL copy script
-│
-├── 🚫 .gitignore                   # Git ignore file
-├── 📌 .gitattributes               # Git attributes file
-│
-└── 📂 Win32/                       # Build output
-    └── 📂 Debug/
-        ├── 🚀 DxPdfViewer.exe      # Compiled application
-        ├── 📚 pdfium.dll           # PDFium library
-        └── 📂 dcu/                 # Delphi Compiled Units
-```
-
----
-
-## 🔨 Compilation
-
-### 📋 Prerequisites
-
-1. **Clone the repository with submodules:**
+1. **Clone the repository:**
    ```bash
-   git clone --recursive https://github.com/yourusername/DX-PDFViewer.git
+   git clone https://github.com/yourusername/holocron.git
+   cd holocron
    ```
 
-2. **Or initialize submodules after cloning:**
-   ```bash
-   git submodule update --init --recursive
-   ```
+2. **Open the project:**
+   - Open `Holocron.dproj` in Delphi IDE
 
-3. **Download PDFium binaries** (if not using submodule):
-   - Download from [pdfium-binaries releases](https://github.com/bblanchon/pdfium-binaries/releases/latest)
-   - Extract to `lib/pdfium-bin/`
+3. **Build:**
+   - Press **F9** or select **Run → Run**
+   - The PDFium DLL will be automatically copied to the output directory
 
-### 💻 With MSBuild (Command Line)
+### Running
 
-```powershell
-# Set Delphi environment
-$env:BDS='C:\Program Files (x86)\Embarcadero\Studio\23.0'
-
-# Compile project
-msbuild DxPdfViewer.dproj /p:Config=Debug /p:Platform=Win32
-
-# Copy PDFium DLL to output directory
-.\copy-pdfium-dll.bat Win32 Debug
+**Windows:**
+```bash
+Win32\Debug\Holocron.exe
 ```
 
-**Output:** `Win32\Debug\DxPdfViewer.exe`
-
----
-
-### 🎨 With Delphi IDE
-
-| Step | Action |
-|------|--------|
-| 1️⃣ | Open `DxPdfViewer.dproj` in Delphi 12 |
-| 2️⃣ | Select the desired platform (Win32/Win64) |
-| 3️⃣ | Press **F9** to compile and run |
-
----
-
-## 📂 Output Paths
-
-The project follows the **recommended Delphi schema**:
-
-| Type | Path | Example |
-|------|------|---------|
-| 🚀 **Executable** | `$(Platform)\$(Config)` | `Win32\Debug` |
-| 📦 **DCU Files** | `$(Platform)\$(Config)\dcu` | `Win32\Debug\dcu` |
-
-> This enables clean separation between platforms and configurations.
-
----
-
-## 📐 Coding Standards
-
-This project follows the **[Delphi Style Guide](https://github.com/omonien/DelphiStandards/blob/master/Delphi%20Style%20Guide%20EN.md)**
-
-### Naming Conventions
-
-| Element | Format | Example |
-|---------|--------|---------|
-| 🏛️ **Classes** | `T` + PascalCase | `TMainForm` |
-| 📝 **Local Variables** | `L` + PascalCase | `LFilePath` |
-| 🔒 **Fields** | `F` + PascalCase | `FCurrentPdfPath` |
-| 🔧 **Methods** | PascalCase | `LoadPdfFile` |
-| 📌 **Constants** | `C_` + UPPER_SNAKE | `C_MAX_SIZE` |
-
-### Formatting
-
-| Rule | Value |
-|------|-------|
-| ↹ **Indentation** | 2 spaces |
-| 📏 **Line Length** | Max. 120 characters |
-| 📄 **File Encoding** | UTF-8 (without BOM for .pas) |
-| ↵ **Line Endings** | CRLF (Windows standard) |
-
----
-
-## 🏗️ Architecture
-
-The project follows a clean **3-layer architecture** for maintainability and testability:
-
-### Layer 1: PDFium API (`DX.Pdf.API.pas`)
-- **Low-level C-API bindings** to PDFium library
-- Platform-independent declarations
-- Direct function imports from `pdfium.dll` / `libpdfium.so` / `libpdfium.dylib`
-- Type definitions matching PDFium's C structures
-
-### Layer 2: Document Wrapper (`DX.Pdf.Document.pas`)
-- **Object-oriented wrapper** around PDFium API
-- Automatic resource management (reference counting)
-- Exception handling with custom exception types
-- Classes: `TPdfLibrary`, `TPdfDocument`, `TPdfPage`
-- **Fully unit tested** with DUnitX
-
-### Layer 3: FMX Viewer (`DX.Pdf.Viewer.FMX.pas`)
-- **Visual FMX component** for displaying PDFs
-- Inherits from `TControl` for full FMX integration
-- Features:
-  - Page navigation (Next, Previous, First, Last)
-  - Automatic rendering on resize
-  - Background color customization
-  - Event notifications (`OnPageChanged`)
-- **Drag & Drop support** (works correctly, unlike TWebBrowser!)
-
-### Benefits of this Architecture
-
-| Benefit | Description |
-|---------|-------------|
-| ✅ **Testability** | Each layer can be tested independently |
-| ✅ **Maintainability** | Clear separation of concerns |
-| ✅ **Extensibility** | Easy to add new features (zoom, search, etc.) |
-| ✅ **Cross-Platform** | Layer 1 & 2 are platform-independent |
-| ✅ **Reusability** | Document layer can be used in VCL projects too |
-
----
-
-## 📜 License
-
-```
-MIT License
-
-Copyright (c) 2025 DX PDF-Viewer Project
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+**Command-line with file:**
+```bash
+Holocron.exe path\to\document.pdf
 ```
 
 ---
 
-## 👨‍💻 Development
+## Usage
 
-**Developed with:**
-- 🤖 [Augment Code](https://www.augmentcode.com/) - AI-Powered Development
-- 🛠️ Embarcadero Delphi 12 Athens
-- 💻 FireMonkey (FMX) Framework
+### Opening PDF Files
+
+**Method 1: Drag & Drop**
+- Drag a PDF file from Explorer and drop it onto the HOLOCRON window
+
+**Method 2: Click to Browse**
+- Click anywhere on the drop zone or status bar to open the file browser
+- Select a PDF file and click "Open"
+
+**Method 3: Keyboard Shortcut**
+- Press **Ctrl+O** to open the file browser
+
+**Method 4: Command Line**
+- Pass the PDF file path as a command-line argument:
+  ```bash
+  Holocron.exe document.pdf
+  ```
+
+### Navigation
+
+| Action | Method |
+|--------|--------|
+| **Next Page** | ↓ Arrow Key, Mouse Wheel Down, Swipe Up |
+| **Previous Page** | ↑ Arrow Key, Mouse Wheel Up, Swipe Down |
+| **Open File** | Ctrl+O, Click on status bar |
+
+### Status Bar
+
+The status bar displays:
+- **File name** (clickable to open another file)
+- **PDF version** (e.g., PDF 1.7)
+- **PDF/A compliance** (if applicable)
+- **Current page / Total pages**
 
 ---
 
-## 🔗 Links
+## Using the Delphi PDFium Wrapper Classes
 
-### Project Resources
-- 📚 [Delphi Style Guide](https://github.com/omonien/DelphiStandards)
-- 🏢 [Embarcadero Delphi](https://www.embarcadero.com/products/delphi)
-- 🌐 [FireMonkey Documentation](https://docwiki.embarcadero.com/RADStudio/en/FireMonkey_Application_Platform)
+HOLOCRON includes a set of object-oriented wrapper classes for PDFium that make it easy to work with PDF documents in Delphi.
 
-### PDFium Resources
-- 📖 [PDFium Official Repository](https://pdfium.googlesource.com/pdfium/)
-- 📦 [PDFium Binaries by bblanchon](https://github.com/bblanchon/pdfium-binaries)
-- 📚 [PDFium API Documentation](https://pdfium.googlesource.com/pdfium/+/refs/heads/main/public/)
+For detailed documentation on using these classes in your own projects, see:
 
-### Testing
-- ✅ [DUnitX Framework](https://github.com/VSoftTechnologies/DUnitX)
+📖 **[Using the DX.Pdf Wrapper Classes](USING_DX_PDF.md)**
 
 ---
 
-<div align="center">
+## Project Structure
 
-**Made with ❤️ and Delphi**
+```
+holocron/
+├── src/                      # Source code
+│   ├── DX.Pdf.API.pas       # Low-level PDFium C-API bindings
+│   ├── DX.Pdf.Document.pas  # High-level document/page classes
+│   ├── DX.Pdf.Viewer.FMX.pas # FMX visual component
+│   ├── Holocron/            # Main application
+│   │   ├── Holocron.dpr     # Main program file
+│   │   ├── Holocron.dproj   # Delphi project file
+│   │   ├── Main.Form.pas    # Main application form
+│   │   └── Main.Form.fmx    # Form layout
+│   └── tests/               # Unit tests
+│       ├── HolocronTests.dpr    # Test project
+│       ├── HolocronTests.dproj  # Test project file
+│       └── DX.Pdf.Document.Tests.pas
+├── assets/                   # Icons and logos
+│   ├── Icon.svg             # Application icon (source)
+│   └── Logo.svg             # HOLOCRON logo
+└── lib/                      # Third-party libraries
+    ├── pdfium-bin/          # PDFium binaries
+    └── DUnitX/              # Unit testing framework
+```
 
-*Version 1.0 | 2025*
 
-</div>
+---
 
+## Architecture
+
+### PDFium Wrapper Layers
+
+**1. Low-Level API (`DX.Pdf.API.pas`)**
+- Direct C-API bindings to PDFium
+- Platform-independent function declarations
+- Minimal abstraction
+
+**2. High-Level Classes (`DX.Pdf.Document.pas`)**
+- Object-oriented wrapper with automatic resource management
+- Reference counting for documents and pages
+- Metadata extraction (title, author, PDF/A compliance, etc.)
+- Bitmap rendering with configurable DPI
+
+**3. Visual Component (`DX.Pdf.Viewer.FMX.pas`)**
+- FMX component for displaying PDFs
+- Automatic page navigation
+- Drag & Drop support
+- Background rendering for smooth UI
+
+### Threading Model
+
+- **Main Thread:** UI updates, user interaction
+- **Background Thread:** PDF page rendering (using `TTask`)
+- **Synchronization:** `TThread.Synchronize` for bitmap updates
+
+---
+
+## Dependencies
+
+### PDFium Library
+
+HOLOCRON uses Google's PDFium library for PDF rendering:
+
+- **Source:** https://pdfium.googlesource.com/pdfium/
+- **Binaries:** https://github.com/bblanchon/pdfium-binaries
+- **License:** BSD-3-Clause (compatible with commercial use)
+
+### DUnitX
+
+Unit testing framework:
+
+- **Source:** https://github.com/VSoftTechnologies/DUnitX
+- **License:** Apache 2.0
+
+---
+
+## Testing
+
+HOLOCRON includes comprehensive unit tests for the PDFium wrapper classes.
+
+### Running Tests
+
+**Option 1: Batch Script**
+```bash
+cd src\tests
+build-and-run-tests.bat
+```
+
+**Option 2: Delphi IDE**
+1. Open `src\tests\HolocronTests.dproj`
+2. Press **F9** to run tests
+3. View results in the console
+
+### Test Coverage
+
+- ✅ PDF document loading
+- ✅ Page count and dimensions
+- ✅ Metadata extraction
+- ✅ PDF/A detection
+- ✅ Bitmap rendering
+- ✅ Error handling
+
+---
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit pull requests or open issues.
+
+---
+
+## License
+
+Copyright (c) 2025 Olaf Monien
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### Third-Party Licenses
+
+- **PDFium:** BSD-3-Clause License
+- **DUnitX:** Apache 2.0 License
+
+---
+
+## Author
+
+**Olaf Monien**
+- Website: https://developer-experts.net
+- Email: olaf@monien.net
+
+---
+
+## Acknowledgments
+
+- **Google** for the PDFium library
+- **Benoît Blanchon** for maintaining PDFium binaries
+- **VSoft Technologies** for DUnitX
+- **Embarcadero** for Delphi
+
+---
+
+**HOLOCRON** - *Preserving knowledge, one PDF at a time.*

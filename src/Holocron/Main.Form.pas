@@ -1,3 +1,15 @@
+{*******************************************************************************
+  Unit: Main.Form
+
+  Part of HOLOCRON - The Delphi PDF Viewer
+  https://developer-experts.net
+
+  Description:
+    Main application form for HOLOCRON PDF Viewer.
+    Provides a minimalistic interface for viewing PDF documents.
+
+  Copyright (c) 2025 Olaf Monien
+*******************************************************************************}
 unit Main.Form;
 
 interface

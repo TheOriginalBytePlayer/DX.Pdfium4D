@@ -1,11 +1,17 @@
-unit DX.Pdf.Document;
+{*******************************************************************************
+  Unit: DX.Pdf.Document
 
-{
-  Object-oriented wrapper for PDFium library
-  
-  Provides high-level access to PDF documents with automatic resource management.
-  All classes use reference counting and automatic cleanup.
-}
+  Part of HOLOCRON - The Delphi PDF Viewer
+  https://developer-experts.net
+
+  Description:
+    Object-oriented wrapper for PDFium library.
+    Provides high-level access to PDF documents with automatic resource management.
+    All classes use reference counting and automatic cleanup.
+
+  Copyright (c) 2025 Olaf Monien
+*******************************************************************************}
+unit DX.Pdf.Document;
 
 interface
 
