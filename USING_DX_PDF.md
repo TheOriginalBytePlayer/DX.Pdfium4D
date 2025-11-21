@@ -516,7 +516,7 @@ LPage.RenderToBitmap(LBitmap, 150);  // Instead of 96
 
 ## License
 
-The DX.Pdf wrapper classes are part of HOLOCRON and are licensed under the MIT License.
+The DX.Pdf wrapper classes are part of DX Pdfium4D and are licensed under the MIT License.
 
 PDFium itself is licensed under the BSD-3-Clause License.
 
@@ -526,11 +526,11 @@ PDFium itself is licensed under the BSD-3-Clause License.
 
 For questions, issues, or contributions:
 
-- **GitHub:** https://github.com/yourusername/holocron
+- **GitHub:** https://github.com/omonien/DX-Pdfium4D
 - **Website:** https://developer-experts.net
 - **Email:** olaf@monien.net
 
 ---
 
-**Part of HOLOCRON - The Delphi PDF Viewer**
+**Part of DX Pdfium4D - Delphi Cross-Platform Wrapper für Pdfium**
 Copyright (c) 2025 Olaf Monien
