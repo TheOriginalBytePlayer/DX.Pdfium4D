@@ -282,6 +282,9 @@ DX-Pdfium4D/
 ├── assets/                   # Icons and logos
 │   ├── Icon.svg             # Application icon (source)
 │   └── Logo.svg             # DX Pdfium4D logo
+├── samples/                  # Sample PDF files for testing
+│   ├── Simple PDF 2.0 file.pdf  # Basic PDF 2.0 example
+│   └── pdf20-utf8-test.pdf      # Complex PDF with UTF-8, bookmarks, layers
 └── lib/                      # Third-party libraries
     ├── pdfium-bin/          # PDFium binaries
     └── DUnitX/              # Unit testing framework
@@ -335,6 +338,28 @@ Unit testing framework:
 
 - **Source:** https://github.com/VSoftTechnologies/DUnitX
 - **License:** Apache 2.0
+
+---
+
+## Sample PDF Files
+
+The `samples/` directory contains example PDF files for testing and demonstration purposes:
+
+### Simple PDF 2.0 file.pdf
+A basic single-page PDF 2.0 file demonstrating:
+- Simple text and path operators
+- Commented content stream for educational purposes
+- Example XMP metadata fields
+
+### pdf20-utf8-test.pdf
+A more complex PDF 2.0 file featuring:
+- UTF-8 encoded text strings (new in PDF 2.0)
+- Outlines (bookmarks) with Unicode characters
+- Optional Content layers with UTF-8 names
+- AltText and Information dictionary with UTF-8 values
+- Non-trivial Unicode characters for testing
+
+**Attribution:** Sample PDF files are provided by the [PDF Association](https://github.com/pdf-association/pdf20examples) under the [Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/) license.
 
 ---
 
@@ -449,6 +474,7 @@ Special thanks to:
 
 - **Google** - For creating and maintaining the [PDFium library](https://pdfium.googlesource.com/pdfium/)
 - **Benoît Blanchon** - For maintaining [PDFium binaries](https://github.com/bblanchon/pdfium-binaries)
+- **PDF Association** - For providing [PDF 2.0 example files](https://github.com/pdf-association/pdf20examples) for testing
 - **VSoft Technologies** - For the excellent [DUnitX](https://github.com/VSoftTechnologies/DUnitX) testing framework
 - **Embarcadero** - For Delphi and the FireMonkey framework
 - **The Delphi Community** - For continuous support and feedback
