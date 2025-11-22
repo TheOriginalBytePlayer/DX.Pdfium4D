@@ -1,19 +1,19 @@
 {*******************************************************************************
-  Unit: DX.Pdf.Viewer.FMX
+  Unit: DX.Pdf.Viewer.VCL
 
   Part of DX Pdfium4D - Delphi Cross-Platform Wrapper für Pdfium
   https://github.com/omonien/DX-Pdfium4D
 
   Description:
-    FMX PDF Viewer Component.
-    Provides a visual component for displaying PDF documents in FMX applications.
+    VCL PDF Viewer Component.
+    Provides a visual component for displaying PDF documents in VCL applications.
     Supports navigation, zooming, and drag-and-drop.
 
   Author: Olaf Monien
   Copyright (c) 2025 Olaf Monien
   License: MIT - see LICENSE file
 *******************************************************************************}
-unit DX.Pdf.Viewer.FMX;
+unit DX.Pdf.Viewer.VCL;
 
 interface
 
@@ -23,34 +23,33 @@ uses
   System.UITypes,
   System.Classes,
   System.Threading,
-  FMX.Types,
-  FMX.Controls,
-  FMX.Graphics,
-  FMX.Objects,
-  FMX.StdCtrls,
-  FMX.Forms,
-  FMX.Layouts,
+  Winapi.Windows,
+  Winapi.Messages,
+  Vcl.Controls,
+  Vcl.Graphics,
+  Vcl.ExtCtrls,
+  Vcl.StdCtrls,
+  Vcl.Forms,
   DX.Pdf.API,
   DX.Pdf.Document,
-  DX.Pdf.Renderer.FMX,  // FMX-specific renderer
+  DX.Pdf.Renderer.VCL,  // VCL-specific renderer
   DX.Pdf.Viewer.Core;
 
 type
   /// <summary>
-  /// FMX component for displaying PDF documents
+  /// VCL component for displaying PDF documents
   /// </summary>
-  TPdfViewer = class(TControl)
+  TPdfViewer = class(TCustomControl)
   private
     FCore: TPdfViewerCore;
     FImage: TImage;
     FLoadingPanel: TPanel;
     FLoadingLabel: TLabel;
-    FLoadingArc: TArc;
     FRenderTask: ITask;
     function GetCurrentPageIndex: Integer;
     procedure SetCurrentPageIndex(const AValue: Integer);
-    function GetBackgroundColor: TAlphaColor;
-    procedure SetBackgroundColor(const AValue: TAlphaColor);
+    function GetBackgroundColor: TColor;
+    procedure SetBackgroundColor(const AValue: TColor);
     function GetShowLoadingIndicator: Boolean;
     procedure SetShowLoadingIndicator(const AValue: Boolean);
     function GetPageCount: Integer;
@@ -58,15 +57,16 @@ type
     function GetOnPageChanged: TNotifyEvent;
     procedure SetOnPageChanged(const AValue: TNotifyEvent);
     procedure RenderPageInBackground;
-    procedure OnRenderComplete(ABitmap: FMX.Graphics.TBitmap);
+    procedure OnRenderComplete(ABitmap: Vcl.Graphics.TBitmap);
     procedure CreateImage;
     procedure CreateLoadingIndicator;
     procedure DoShowLoadingIndicatorInternal(AShow: Boolean);
   protected
     procedure Resize; override;
     procedure Paint; override;
-    procedure KeyDown(var Key: Word; var KeyChar: WideChar; Shift: TShiftState); override;
+    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
     procedure MouseWheel(Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean); override;
+    procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -138,7 +138,7 @@ type
     /// <summary>
     /// Background color for the viewer
     /// </summary>
-    property BackgroundColor: TAlphaColor read GetBackgroundColor write SetBackgroundColor default TAlphaColors.White;
+    property BackgroundColor: TColor read GetBackgroundColor write SetBackgroundColor default clWhite;
 
     /// <summary>
     /// Show loading indicator overlay while rendering pages
@@ -153,35 +153,14 @@ type
     // Inherited published properties
     property Align;
     property Anchors;
-    property ClipChildren default False;
-    property ClipParent default False;
-    property Cursor default crDefault;
-    property DragMode default TDragMode.dmManual;
-    property EnableDragHighlight default True;
-    property Enabled default True;
-    property Locked default False;
-    property Height;
-    property HitTest default True;
-    property Padding;
-    property Opacity;
-    property Margins;
+    property Color default clWhite;
+    property ParentColor;
+    property ParentShowHint;
     property PopupMenu;
-    property Position;
-    property RotationAngle;
-    property RotationCenter;
-    property Scale;
-    property Size;
+    property ShowHint;
     property TabOrder;
-    property TabStop;
-    property Visible default True;
-    property Width;
-
-    // Events
-    property OnDragEnter;
-    property OnDragLeave;
-    property OnDragOver;
-    property OnDragDrop;
-    property OnDragEnd;
+    property TabStop default True;
+    property Visible;
     property OnClick;
     property OnDblClick;
     property OnMouseDown;
@@ -190,22 +169,19 @@ type
     property OnMouseWheel;
     property OnMouseEnter;
     property OnMouseLeave;
-    property OnPainting;
-    property OnPaint;
     property OnResize;
   end;
 
 implementation
 
 uses
-  System.Math,
-  FMX.Platform;
+  System.Math;
 
 type
   /// <summary>
-  /// FMX-specific implementation of TPdfViewerCore
+  /// VCL-specific implementation of TPdfViewerCore
   /// </summary>
-  TPdfViewerCoreFMX = class(TPdfViewerCore)
+  TPdfViewerCoreVCL = class(TPdfViewerCore)
   private
     FViewer: TPdfViewer;
   protected
@@ -222,45 +198,45 @@ type
     procedure CallRenderCurrentPage;
   end;
 
-{ TPdfViewerCoreFMX }
+{ TPdfViewerCoreVCL }
 
-constructor TPdfViewerCoreFMX.Create(AViewer: TPdfViewer);
+constructor TPdfViewerCoreVCL.Create(AViewer: TPdfViewer);
 begin
   inherited Create(AViewer);
   FViewer := AViewer;
 end;
 
-procedure TPdfViewerCoreFMX.DoRenderCurrentPage;
+procedure TPdfViewerCoreVCL.DoRenderCurrentPage;
 begin
   FViewer.RenderPageInBackground;
 end;
 
-procedure TPdfViewerCoreFMX.DoShowLoadingIndicator(AShow: Boolean);
+procedure TPdfViewerCoreVCL.DoShowLoadingIndicator(AShow: Boolean);
 begin
   FViewer.DoShowLoadingIndicatorInternal(AShow);
 end;
 
-function TPdfViewerCoreFMX.GetCurrentPage: TPdfPage;
+function TPdfViewerCoreVCL.GetCurrentPage: TPdfPage;
 begin
   Result := CurrentPage;
 end;
 
-procedure TPdfViewerCoreFMX.SetCurrentPage(const AValue: TPdfPage);
+procedure TPdfViewerCoreVCL.SetCurrentPage(const AValue: TPdfPage);
 begin
   CurrentPage := AValue;
 end;
 
-function TPdfViewerCoreFMX.GetIsRendering: Boolean;
+function TPdfViewerCoreVCL.GetIsRendering: Boolean;
 begin
   Result := IsRendering;
 end;
 
-procedure TPdfViewerCoreFMX.SetIsRendering(const AValue: Boolean);
+procedure TPdfViewerCoreVCL.SetIsRendering(const AValue: Boolean);
 begin
   IsRendering := AValue;
 end;
 
-procedure TPdfViewerCoreFMX.CallRenderCurrentPage;
+procedure TPdfViewerCoreVCL.CallRenderCurrentPage;
 begin
   RenderCurrentPage;
 end;
@@ -270,11 +246,12 @@ end;
 constructor TPdfViewer.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FCore := TPdfViewerCoreFMX.Create(Self);
+  FCore := TPdfViewerCoreVCL.Create(Self);
 
   // Enable keyboard and mouse input
-  CanFocus := True;
   TabStop := True;
+  Color := clWhite;
+  ControlStyle := ControlStyle + [csOpaque];
 
   CreateImage;
   CreateLoadingIndicator;
@@ -282,7 +259,6 @@ end;
 
 destructor TPdfViewer.Destroy;
 begin
-  FreeAndNil(FLoadingArc);
   FreeAndNil(FLoadingLabel);
   FreeAndNil(FLoadingPanel);
   FreeAndNil(FCore);
@@ -299,14 +275,14 @@ begin
   FCore.CurrentPageIndex := AValue;
 end;
 
-function TPdfViewer.GetBackgroundColor: TAlphaColor;
+function TPdfViewer.GetBackgroundColor: TColor;
 begin
-  Result := FCore.BackgroundColor;
+  Result := TColor(FCore.BackgroundColor);
 end;
 
-procedure TPdfViewer.SetBackgroundColor(const AValue: TAlphaColor);
+procedure TPdfViewer.SetBackgroundColor(const AValue: TColor);
 begin
-  FCore.BackgroundColor := AValue;
+  FCore.BackgroundColor := TAlphaColor(AValue) or $FF000000; // Add alpha channel
 end;
 
 function TPdfViewer.GetShowLoadingIndicator: Boolean;
@@ -345,10 +321,10 @@ begin
   begin
     FImage := TImage.Create(Self);
     FImage.Parent := Self;
-    FImage.Align := TAlignLayout.Client;
-    FImage.HitTest := False;
-    // Use Center mode to display bitmap at exact size without scaling
-    FImage.WrapMode := TImageWrapMode.Center;
+    FImage.Align := alClient;
+    FImage.Center := True;
+    FImage.Proportional := False;
+    FImage.Stretch := False;
   end;
 end;
 
@@ -357,39 +333,23 @@ begin
   // Create semi-transparent panel as background
   FLoadingPanel := TPanel.Create(Self);
   FLoadingPanel.Parent := Self;
-  FLoadingPanel.Align := TAlignLayout.Center;
   FLoadingPanel.Width := 200;
   FLoadingPanel.Height := 100;
-  FLoadingPanel.Opacity := 0.9;
+  FLoadingPanel.Left := (Width - FLoadingPanel.Width) div 2;
+  FLoadingPanel.Top := (Height - FLoadingPanel.Height) div 2;
+  FLoadingPanel.Anchors := [akLeft, akTop];
+  FLoadingPanel.BevelOuter := bvRaised;
+  FLoadingPanel.Color := clWhite;
   FLoadingPanel.Visible := False;
-  FLoadingPanel.HitTest := False;
-
-  // Create animated arc (spinner)
-  FLoadingArc := TArc.Create(FLoadingPanel);
-  FLoadingArc.Parent := FLoadingPanel;
-  FLoadingArc.Align := TAlignLayout.Top;
-  FLoadingArc.Height := 50;
-  FLoadingArc.Margins.Top := 10;
-  FLoadingArc.Margins.Left := 75;
-  FLoadingArc.Margins.Right := 75;
-  FLoadingArc.StartAngle := 0;
-  FLoadingArc.EndAngle := 270;
-  FLoadingArc.Stroke.Color := TAlphaColors.Dodgerblue;
-  FLoadingArc.Stroke.Thickness := 3;
-  FLoadingArc.Fill.Kind := TBrushKind.None;
-  FLoadingArc.HitTest := False;
 
   // Create loading label
   FLoadingLabel := TLabel.Create(FLoadingPanel);
   FLoadingLabel.Parent := FLoadingPanel;
-  FLoadingLabel.Align := TAlignLayout.Client;
-  FLoadingLabel.TextSettings.HorzAlign := TTextAlign.Center;
-  FLoadingLabel.TextSettings.VertAlign := TTextAlign.Center;
-  FLoadingLabel.TextSettings.Font.Size := 14;
-  FLoadingLabel.StyledSettings := [TStyledSetting.Family, TStyledSetting.Style];
-  FLoadingLabel.TextSettings.FontColor := TAlphaColors.Black;
-  FLoadingLabel.Text := 'Loading...';
-  FLoadingLabel.HitTest := False;
+  FLoadingLabel.Align := alClient;
+  FLoadingLabel.Alignment := taCenter;
+  FLoadingLabel.Layout := tlCenter;
+  FLoadingLabel.Font.Size := 12;
+  FLoadingLabel.Caption := 'Loading...';
 end;
 
 procedure TPdfViewer.LoadFromFile(const AFileName: string; const APassword: string);
@@ -406,123 +366,15 @@ procedure TPdfViewer.Close;
 begin
   FCore.Close;
   if FImage <> nil then
-    FImage.Bitmap.Clear(FCore.BackgroundColor);
-  Repaint;
+  begin
+    FImage.Picture.Bitmap.SetSize(0, 0);
+    Invalidate;
+  end;
 end;
 
 function TPdfViewer.IsDocumentLoaded: Boolean;
 begin
   Result := FCore.IsDocumentLoaded;
-end;
-
-procedure TPdfViewer.RenderPageInBackground;
-var
-  LRenderWidth: Integer;
-  LRenderHeight: Integer;
-  LAspectRatio: Double;
-  LControlWidth: Integer;
-  LControlHeight: Integer;
-  LScreenService: IFMXScreenService;
-  LScale: Single;
-  LPageIndex: Integer;
-  LBackgroundColor: TAlphaColor;
-  LCurrentPage: TPdfPage;
-  LCoreFMX: TPdfViewerCoreFMX;
-begin
-  LCoreFMX := TPdfViewerCoreFMX(FCore);
-
-  // Capture values in main thread
-  LPageIndex := FCore.CurrentPageIndex;
-  LBackgroundColor := FCore.BackgroundColor;
-
-  // Get screen scale factor for high-DPI displays
-  LScale := 1.0;
-  if TPlatformServices.Current.SupportsPlatformService(IFMXScreenService, LScreenService) then
-    LScale := LScreenService.GetScreenScale;
-
-  // Get control size in pixels
-  LControlWidth := Trunc(Width);
-  LControlHeight := Trunc(Height);
-
-  if (LControlWidth <= 0) or (LControlHeight <= 0) then
-  begin
-    LCoreFMX.SetIsRendering(False);
-    Exit;
-  end;
-
-  // Load page in main thread (PDFium is not thread-safe for loading)
-  LCoreFMX.SetCurrentPage(FCore.Document.GetPageByIndex(LPageIndex));
-  LCurrentPage := LCoreFMX.GetCurrentPage;
-
-  if LCurrentPage = nil then
-  begin
-    LCoreFMX.SetIsRendering(False);
-    DoShowLoadingIndicatorInternal(False);
-    Exit;
-  end;
-
-  // Calculate aspect ratio of PDF page
-  LAspectRatio := LCurrentPage.Width / LCurrentPage.Height;
-
-  // Calculate render size to fit control while maintaining aspect ratio
-  if LControlWidth / LControlHeight > LAspectRatio then
-  begin
-    // Height is limiting factor
-    LRenderHeight := Round(LControlHeight * LScale);
-    LRenderWidth := Round(LRenderHeight * LAspectRatio);
-  end
-  else
-  begin
-    // Width is limiting factor
-    LRenderWidth := Round(LControlWidth * LScale);
-    LRenderHeight := Round(LRenderWidth / LAspectRatio);
-  end;
-
-  // Render in background thread
-  FRenderTask := TTask.Run(
-    procedure
-    var
-      LTempBitmap: FMX.Graphics.TBitmap;
-    begin
-      LTempBitmap := FMX.Graphics.TBitmap.Create;
-      try
-        LTempBitmap.SetSize(LRenderWidth, LRenderHeight);
-        LTempBitmap.BitmapScale := LScale;
-
-        // Render at exact size (this is the slow part)
-        LCurrentPage.RenderToBitmap(LTempBitmap, LBackgroundColor);
-
-        // Switch back to main thread to update UI
-        TThread.Queue(TThread.Current,
-          procedure
-          begin
-            OnRenderComplete(LTempBitmap);
-          end);
-      except
-        LTempBitmap.Free;
-        TThread.Queue(TThread.Current,
-          procedure
-          begin
-            LCoreFMX.SetIsRendering(False);
-            DoShowLoadingIndicatorInternal(False);
-          end);
-      end;
-    end);
-end;
-
-procedure TPdfViewer.OnRenderComplete(ABitmap: FMX.Graphics.TBitmap);
-begin
-  try
-    // Swap bitmaps (fast operation in main thread)
-    FImage.Bitmap.Assign(ABitmap);
-
-    // Hide loading indicator and show rendered page
-    DoShowLoadingIndicatorInternal(False);
-    Repaint;
-  finally
-    ABitmap.Free;
-    TPdfViewerCoreFMX(FCore).SetIsRendering(False);
-  end;
 end;
 
 procedure TPdfViewer.NextPage;
@@ -548,8 +400,16 @@ end;
 procedure TPdfViewer.Resize;
 begin
   inherited;
+
+  // Center loading panel
+  if FLoadingPanel <> nil then
+  begin
+    FLoadingPanel.Left := (Width - FLoadingPanel.Width) div 2;
+    FLoadingPanel.Top := (Height - FLoadingPanel.Height) div 2;
+  end;
+
   if IsDocumentLoaded and (FCore.CurrentPageIndex >= 0) then
-    TPdfViewerCoreFMX(FCore).CallRenderCurrentPage;
+    TPdfViewerCoreVCL(FCore).CallRenderCurrentPage;
 end;
 
 procedure TPdfViewer.Paint;
@@ -557,42 +417,48 @@ begin
   inherited;
   if not IsDocumentLoaded then
   begin
-    Canvas.Fill.Color := FCore.BackgroundColor;
-    Canvas.FillRect(LocalRect, 0, 0, [], 1.0);
+    Canvas.Brush.Color := Color;
+    Canvas.FillRect(ClientRect);
   end;
 end;
 
-procedure TPdfViewer.KeyDown(var Key: Word; var KeyChar: WideChar; Shift: TShiftState);
+procedure TPdfViewer.WMEraseBkgnd(var Message: TWMEraseBkgnd);
+begin
+  // Prevent flicker
+  Message.Result := 1;
+end;
+
+procedure TPdfViewer.KeyDown(var Key: Word; Shift: TShiftState);
 begin
   inherited;
 
   case Key of
-    vkUp, vkLeft:
+    VK_UP, VK_LEFT:
     begin
       PreviousPage;
       Key := 0; // Mark as handled
     end;
-    vkDown, vkRight:
+    VK_DOWN, VK_RIGHT:
     begin
       NextPage;
       Key := 0; // Mark as handled
     end;
-    vkHome:
+    VK_HOME:
     begin
       FirstPage;
       Key := 0; // Mark as handled
     end;
-    vkEnd:
+    VK_END:
     begin
       LastPage;
       Key := 0; // Mark as handled
     end;
-    vkPrior: // Page Up
+    VK_PRIOR: // Page Up
     begin
       PreviousPage;
       Key := 0; // Mark as handled
     end;
-    vkNext: // Page Down
+    VK_NEXT: // Page Down
     begin
       NextPage;
       Key := 0; // Mark as handled
@@ -621,16 +487,101 @@ procedure TPdfViewer.DoShowLoadingIndicatorInternal(AShow: Boolean);
 begin
   if FLoadingPanel <> nil then
   begin
-    if AShow and FCore.ShowLoadingIndicator then
-    begin
-      FLoadingPanel.Visible := True;
+    FLoadingPanel.Visible := AShow;
+    if AShow then
       FLoadingPanel.BringToFront;
-      Application.ProcessMessages; // Force UI update
-    end
-    else
+  end;
+end;
+
+procedure TPdfViewer.RenderPageInBackground;
+var
+  LCoreFMX: TPdfViewerCoreVCL;
+  LCurrentPage: TPdfPage;
+  LPageIndex: Integer;
+  LRenderWidth: Integer;
+  LRenderHeight: Integer;
+  LBackgroundColor: TAlphaColor;
+begin
+  LCoreFMX := TPdfViewerCoreVCL(FCore);
+
+  // Check if already rendering
+  if LCoreFMX.GetIsRendering then
+    Exit;
+
+  // Check if document is loaded
+  if not IsDocumentLoaded then
+    Exit;
+
+  LPageIndex := FCore.CurrentPageIndex;
+  if (LPageIndex < 0) or (LPageIndex >= FCore.PageCount) then
+    Exit;
+
+  // Show loading indicator
+  DoShowLoadingIndicatorInternal(FCore.ShowLoadingIndicator);
+
+  // Mark as rendering
+  LCoreFMX.SetIsRendering(True);
+
+  // Calculate render size (use control size)
+  LRenderWidth := Max(1, Width);
+  LRenderHeight := Max(1, Height);
+  LBackgroundColor := FCore.BackgroundColor;
+
+  // Load page in main thread (PDFium requires this)
+  LCoreFMX.SetCurrentPage(FCore.Document.GetPageByIndex(LPageIndex));
+  LCurrentPage := LCoreFMX.GetCurrentPage;
+
+  if LCurrentPage = nil then
+  begin
+    LCoreFMX.SetIsRendering(False);
+    DoShowLoadingIndicatorInternal(False);
+    Exit;
+  end;
+
+  // Render in background thread
+  FRenderTask := TTask.Run(
+    procedure
+    var
+      LTempBitmap: Vcl.Graphics.TBitmap;
     begin
-      FLoadingPanel.Visible := False;
-    end;
+      LTempBitmap := Vcl.Graphics.TBitmap.Create;
+      try
+        LTempBitmap.PixelFormat := pf32bit;
+        LTempBitmap.SetSize(LRenderWidth, LRenderHeight);
+
+        // Render at exact size (this is the slow part)
+        LCurrentPage.RenderToBitmap(LTempBitmap, LBackgroundColor);
+
+        // Switch back to main thread to update UI
+        TThread.Queue(TThread.Current,
+          procedure
+          begin
+            OnRenderComplete(LTempBitmap);
+          end);
+      except
+        LTempBitmap.Free;
+        TThread.Queue(TThread.Current,
+          procedure
+          begin
+            LCoreFMX.SetIsRendering(False);
+            DoShowLoadingIndicatorInternal(False);
+          end);
+      end;
+    end);
+end;
+
+procedure TPdfViewer.OnRenderComplete(ABitmap: Vcl.Graphics.TBitmap);
+begin
+  try
+    // Assign bitmap to image (fast operation in main thread)
+    FImage.Picture.Bitmap.Assign(ABitmap);
+
+    // Hide loading indicator and show rendered page
+    DoShowLoadingIndicatorInternal(False);
+    Invalidate;
+  finally
+    ABitmap.Free;
+    TPdfViewerCoreVCL(FCore).SetIsRendering(False);
   end;
 end;
 
