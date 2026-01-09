@@ -213,6 +213,8 @@ procedure FPDFText_ClosePage(ATextPage: FPDF_TEXTPAGE); cdecl; external PDFIUM_D
 function FPDFText_CountChars(ATextPage: FPDF_TEXTPAGE): Integer; cdecl; external PDFIUM_DLL;
 function FPDFText_GetUnicode(ATextPage: FPDF_TEXTPAGE; AIndex: Integer): Cardinal; cdecl; external PDFIUM_DLL;
 function FPDFText_GetText(ATextPage: FPDF_TEXTPAGE; AStartIndex: Integer; ACount: Integer; AResult: PWideChar): Integer; cdecl; external PDFIUM_DLL;
+//KJS Added
+procedure FPDFText_GetCharBox(ATextPage: FPDF_TEXTPAGE;index:Integer;left, right, bottom, top:PDouble);cdecl; external PDFIUM_DLL;
 
 // Bookmark functions
 function FPDFBookmark_GetFirstChild(ADocument: FPDF_DOCUMENT; ABookmark: FPDF_BOOKMARK): FPDF_BOOKMARK; cdecl; external PDFIUM_DLL;

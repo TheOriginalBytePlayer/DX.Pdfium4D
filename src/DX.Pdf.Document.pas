@@ -110,7 +110,8 @@ type
     /// <summary>
     /// Loads a PDF document from a file
     /// </summary>
-    procedure LoadFromFile(const AFileName: string; const APassword: string = '');
+//KJS chaged From Procedure
+		function LoadFromFile(const AFileName: string; const APassword: string = ''):boolean;
 
     /// <summary>
     /// Loads a PDF document from a stream with efficient streaming support
@@ -175,6 +176,8 @@ type
     /// Internal PDFium document handle
     /// </summary>
     property Handle: FPDF_DOCUMENT read FHandle;
+//    KJS added
+    property Pages[PageIndex:Integer]:TPdfPage read GetPageByIndex;
   end;
 
   /// <summary>
@@ -336,13 +339,16 @@ begin
   inherited;
 end;
 
-procedure TPdfDocument.LoadFromFile(const AFileName: string; const APassword: string = '');
+//KJS Changed From Procedure
+function TPdfDocument.LoadFromFile(const AFileName: string; const APassword: string = ''):boolean;
 var
   LPasswordAnsi: AnsiString;
   LFilePathUtf8: UTF8String;
   LError: Cardinal;
 begin
   Close;
+  //kjs added result
+  result:=false;
 
   if not FileExists(AFileName) then
     raise EPdfLoadException.CreateFmt('File not found: %s', [AFileName]);
@@ -363,6 +369,8 @@ begin
 
   FFileName := AFileName;
   FPageCount := FPDF_GetPageCount(FHandle);
+  //KJS Added final result
+  result:=isLoaded and (FPageCount > 0);
 end;
 
 procedure TPdfDocument.LoadFromStream(AStream: TStream; AOwnsStream: Boolean; const APassword: string);

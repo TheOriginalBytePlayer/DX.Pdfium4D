@@ -137,3 +137,5 @@ lib/pdfium-bin/licenses/
 !lib/pdfium-bin/VERSION
 !lib/pdfium-bin/LICENSE
 
+/lib
+/lib
