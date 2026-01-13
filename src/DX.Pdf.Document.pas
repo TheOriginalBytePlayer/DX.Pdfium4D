@@ -177,7 +177,9 @@ type
     /// Internal PDFium document handle
     /// </summary>
     property Handle: FPDF_DOCUMENT read FHandle;
-//    KJS added
+    /// <summary>
+    /// Provides indexed access to the document pages.
+    /// </summary>
     property Pages[PageIndex:Integer]:TPdfPage read GetPageByIndex;
   end;
 
