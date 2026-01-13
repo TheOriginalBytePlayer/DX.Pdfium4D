@@ -343,7 +343,7 @@ begin
 end;
 
 //KJS Changed From Procedure
-function TPdfDocument.LoadFromFile(const AFileName: string; const APassword: string = ''):boolean;
+function TPdfDocument.LoadFromFile(const AFileName: string; const APassword: string = ''): Boolean;
 var
   LPasswordAnsi: AnsiString;
   LFilePathUtf8: UTF8String;
