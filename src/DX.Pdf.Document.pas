@@ -110,6 +110,7 @@ type
     /// <summary>
     /// Loads a PDF document from a file
     /// </summary>
+    /// <returns>Returns True if the document was loaded successfully and contains at least one page, False otherwise.</returns>
 //KJS chaged From Procedure
 		function LoadFromFile(const AFileName: string; const APassword: string = ''):boolean;
 
